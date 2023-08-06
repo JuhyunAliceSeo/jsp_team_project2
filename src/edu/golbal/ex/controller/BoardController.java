@@ -52,6 +52,8 @@ public class BoardController extends HttpServlet {
       String com = uri.substring(conPath.length());
       
       System.out.println(com);
+      System.out.println("uri: " + uri);
+      System.out.println("conPath: " + conPath);
       
       if (com.equals("/listViewMember.do")) {
     	  command = new ListCommand();// BCommand인터페이스를 구현할 자손이므로 클래스생성해야함
@@ -73,12 +75,7 @@ public class BoardController extends HttpServlet {
           command.execute(request, response);
           
           viewPage = "listViewMember.do";
-       }else if (com.equals("/insert.do")) {
-           command = new BoardWriteCommand();
-           command.execute(request, response);
-           
-           viewPage = "listViewMember.do";
-        }
+       }
       /*
            클라이언트에게 list.do는 list.jsp로 forwarding을 시키겠다는 의미이다. forwarding은
            BListCommand클래스에게 메모리를 올린 request, response 객체 정보를 list.jsp에서는 사용가능하다는 의미이다.

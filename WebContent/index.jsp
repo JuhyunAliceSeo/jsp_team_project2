@@ -36,12 +36,12 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a class="nav-link active"
-							aria-current="page" href="regMember.do">회원등록</a></li>
+							aria-current="page" href="regMember.jsp">회원등록</a></li>
 						<li class="nav-item"><a class="nav-link" href="listViewMember.do">회원목록조회/수정</a>
 						</li>
 						<li class="nav-item"><a class="nav-link" href="salesView.do">회원매출조회</a>
 						</li>
-						<li class="nav-item"><a class="nav-link" href="#">홈으로</a></li>
+						<li class="nav-item"><a class="nav-link" href="index.jsp">홈으로</a></li>
 					</ul>
 					<form class="d-flex">
 						<input class="form-control me-2" type="search"

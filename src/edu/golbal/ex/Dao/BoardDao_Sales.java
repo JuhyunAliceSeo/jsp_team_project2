@@ -16,25 +16,19 @@ import edu.golbal.ex.dto.BoardDto;
 
 public class BoardDao_Sales {
 	 private DataSource datasource = null;
+	 //DataSource는 데이터베이스 연결 풀을 관리하고, 애플리케이션에서 데이터베이스 연결을 효율적으로 관리할 수 있도록 도와주는 객체
 
 	   public BoardDao_Sales() {
 	      try {
 	         Context context = new InitialContext();
 	         datasource = (DataSource) context.lookup("java:comp/env/jdbc/oracle");
+	         // Context 객체를 사용하여 "java:comp/env/jdbc/oracle" 이름으로 등록된 데이터 소스를 찾는다.
 
 	      } catch (Exception e) {
 	         // TODO: handle exception
 	         e.printStackTrace();
 	      }
 	   }
-
-	   /*
-	    * 리턴타입이 BDto인 이유 : 글목록을 다 표시하려면 ArrayList를 써줘야하지만, 글하나의 내용만 표시하려면 테이블의 한 행만
-	    * 가져오면 되므로 BDto로 타입을 지정하였다.
-	    * 
-	    * 파라미터가 String bid만 있는 이유 : list.jsp에서 contentView.do로 넘어갈때 참조태그에 ${dto.bid}가
-	    * 넘어가므로 bid를 받아줘야한다.
-	    */
 
 	   
 	   public List<BoardDto> list() {

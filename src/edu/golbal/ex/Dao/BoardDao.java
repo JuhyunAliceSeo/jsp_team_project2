@@ -15,6 +15,9 @@ import edu.golbal.ex.dto.BoardDto;
 
 
 public class BoardDao {
+	//DAO = 데이터베이스와의 상호작용을 담당하는 계층 , 데이터베이스와의 CRUD(Create, Read, Update, Delete) 작업을 처리
+	//      데이터베이스 연결, 쿼리 실행, 결과 처리 등과 관련된 로직을 포함
+	
 	 private DataSource datasource = null;
 
 	   public BoardDao() {
@@ -28,14 +31,6 @@ public class BoardDao {
 	      }
 	   }
 
-	   /*
-	    * 리턴타입이 BDto인 이유 : 글목록을 다 표시하려면 ArrayList를 써줘야하지만, 글하나의 내용만 표시하려면 테이블의 한 행만
-	    * 가져오면 되므로 BDto로 타입을 지정하였다.
-	    * 
-	    * 파라미터가 String bid만 있는 이유 : list.jsp에서 contentView.do로 넘어갈때 참조태그에 ${dto.bid}가
-	    * 넘어가므로 bid를 받아줘야한다.
-	    */
-
 	   
 	   public List<BoardDto> list() {
 
@@ -46,7 +41,7 @@ public class BoardDao {
 	      ResultSet rs = null;
 
 	      try {
-	         String query = "select * from member_tbl_02"; // (가지고 오고자하는 쿼리문을 넣어준다)
+	         String query = "select * from member_tbl_02 ORDER BY custno"; // (가지고 오고자하는 쿼리문을 넣어준다)
 
 	         con = datasource.getConnection();
 	         stmt = con.prepareStatement(query);
@@ -90,67 +85,91 @@ public class BoardDao {
 
 	   }
 
-	public void write(int custno, String custname, String phone, String address,String joindate,String grade,String city) {
-		System.out.println("write()...");
-	      Connection con = null;
-	      PreparedStatement stmt = null;
+	public void write(String custname, String phone, String address,String joindate,String grade,String city) {
+		 Connection con = null;
+		    PreparedStatement stmt = null;
+		    ResultSet rs = null;
 
-	      // 이때 ?,?,? 물음표는 아래에서 setString메소드로 넣어줄 값을 표현하는 것
-	      
-	      try {
-	         String query = "insert into member_tbl_02 " + "(custno, custname, phone, address, joindate, grade, city)"
-	               + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+		    try {
+		        String getMaxCustNoQuery = "SELECT MAX(custno) FROM member_tbl_02";
+		        
+		        con = datasource.getConnection();
+		        stmt = con.prepareStatement(getMaxCustNoQuery);
+		        rs = stmt.executeQuery();
+		        
+		        int maxCustNo = 100007;
+		        if(rs.next()){
+		            maxCustNo = rs.getInt("MAX(custno)");
+		        }
+		        
+		        int newCustNo = maxCustNo + 1;
 
-	         con = datasource.getConnection();
-	         stmt = con.prepareStatement(query);
+		        String insertQuery = "INSERT INTO member_tbl_02 " +
+		                            "(custNo, custname, phone, address, joindate, grade, city) " +
+		                            "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-	         stmt.setInt(1, custno);
-	         stmt.setString(2, custname);
-	         stmt.setString(3, phone);
-	         stmt.setString(4, address);
-	         stmt.setString(5, joindate);
-	         stmt.setString(6, grade);
-	         stmt.setString(7, city);
+		        stmt = con.prepareStatement(insertQuery);
 
-	         int rn = stmt.executeUpdate();
+		        stmt.setInt(1, newCustNo);
+		        stmt.setString(2, custname);
+		        stmt.setString(3, phone);
+		        stmt.setString(4, address);
+		        stmt.setString(5, joindate);
+		        stmt.setString(6, grade);
+		        stmt.setString(7, city);
 
-	         System.out.println("write 한 갯수" + rn);
+		        int rn = stmt.executeUpdate();
+		        System.out.println("Insert한 갯수: " + rn);
 
-	      } catch (Exception e) {
-	         e.printStackTrace();
-	      } finally {
-	         // ※제일 나중에 연거를 먼저 닫아줘야한다. Connection, Statement, ResultSet순서로
-	         // 열었으므로 거꾸로 닫아준다.
-	         try {
-	            if (stmt != null)
-	               stmt.close();
-	            if (con != null)
-	               con.close();
-
-	         } catch (Exception e2) {
-	            e2.printStackTrace();
-	         }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            if (rs != null)
+		                rs.close();
+		            if (stmt != null)
+		                stmt.close();
+		            if (con != null)
+		                con.close();
+		        } catch (Exception e2) {
+		            e2.printStackTrace();
+		        }
 	      }
 	   }
 
 	public void insert(BoardDto dto) {
-		Connection con = null;
+	    Connection con = null;
 	    PreparedStatement stmt = null;
+	    ResultSet rs = null;
 
 	    try {
-	        String query = "INSERT INTO member_tbl_02 " +
-	                       "(custNum, custName, custTel, custAdress, custRegiDate, custGrade, cityCode) " +
-	                       "VALUES (member_tbl_02_seq.nextval, ?, ?, ?, ?, ?, ?)";
-
+	        String getMaxCustNoQuery = "SELECT MAX(custno) FROM member_tbl_02";
+	        
 	        con = datasource.getConnection();
-	        stmt = con.prepareStatement(query);
+	        stmt = con.prepareStatement(getMaxCustNoQuery);
+	        rs = stmt.executeQuery();
+	        
+	        int maxCustNo = 100007;
+	        if (rs.next()) {
+	            maxCustNo = rs.getInt(1);
+	        }
+	        
+	       
+	        int newCustNo = maxCustNo + 1;
 
-	        stmt.setString(1, dto.getCustname());
-	        stmt.setString(2, dto.getPhone());
-	        stmt.setString(3, dto.getAddress());
-	        stmt.setTimestamp(4, new Timestamp(dto.getJoindate().getTime()));
-	        stmt.setString(5, dto.getGrade());
-	        stmt.setString(6, dto.getCity());
+	        String insertQuery = "INSERT INTO member_tbl_02 " +
+	                            "(custNo, custName, custTel, custAdress, custRegiDate, custGrade, city) " +
+	                            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+	        stmt = con.prepareStatement(insertQuery);
+
+	        stmt.setInt(1, newCustNo);
+	        stmt.setString(2, dto.getCustname());
+	        stmt.setString(3, dto.getPhone());
+	        stmt.setString(4, dto.getAddress());
+	        stmt.setTimestamp(5, new Timestamp(dto.getJoindate().getTime()));
+	        stmt.setString(6, dto.getGrade());
+	        stmt.setString(7, dto.getCity());
 
 	        int rn = stmt.executeUpdate();
 	        System.out.println("Insert한 갯수: " + rn);
@@ -159,6 +178,8 @@ public class BoardDao {
 	        e.printStackTrace();
 	    } finally {
 	        try {
+	            if (rs != null)
+	                rs.close();
 	            if (stmt != null)
 	                stmt.close();
 	            if (con != null)
@@ -167,7 +188,5 @@ public class BoardDao {
 	            e2.printStackTrace();
 	        }
 	    }
-		
 	}
-
-}
+}	
