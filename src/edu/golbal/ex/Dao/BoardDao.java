@@ -30,6 +30,7 @@ public class BoardDao {
 	         e.printStackTrace();
 	      }
 	   }
+	   // context.lookup("java:comp/env/jdbc/oracle"); = JNDI를 통해 "java:comp/env/jdbc/oracle" 이름의 DataSource를 찾아와서 초기화
 
 	   
 	   public List<BoardDto> list() {
@@ -43,9 +44,9 @@ public class BoardDao {
 	      try {
 	         String query = "select * from member_tbl_02 ORDER BY custno"; // (가지고 오고자하는 쿼리문을 넣어준다)
 
-	         con = datasource.getConnection();
-	         stmt = con.prepareStatement(query);
-	         rs = stmt.executeQuery();
+	         con = datasource.getConnection(); //데이터베이스 연결을 가져온다.
+	         stmt = con.prepareStatement(query); //Connection 객체를 사용하여 쿼리를 실행할 준비를 한다.
+	         rs = stmt.executeQuery(); //PreparedStatement 객체를 사용하여 쿼리를 실행하고 결과를 가져온다.
 
 	         // 반복문을 사용해서 ArrayList에 가져온 데이터를 집어넣는다.
 	         while (rs.next()) {
