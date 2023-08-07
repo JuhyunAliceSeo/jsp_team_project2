@@ -23,7 +23,7 @@
 	class="d-flex vw-100 vh-100 text-center flex-column justify-content-between">
 	<header>
 		<!-- 네비게이션 바 -->
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="index.jsp">쇼핑몰 회원관리 ver1.0</a>
 				<button class="navbar-toggler" type="button"
@@ -35,12 +35,12 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a class="nav-link active"
-							aria-current="page" href="regMember.do">회원등록</a></li>
-						<li class="nav-item"><a class="nav-link"
-							href="listViewMember.do">회원목록조회/수정</a></li>
+							aria-current="page" href="regMember.jsp">회원등록</a></li>
+						<li class="nav-item"><a class="nav-link" href="listViewMember.do">회원목록조회/수정</a>
+						</li>
 						<li class="nav-item"><a class="nav-link" href="salesView.do">회원매출조회</a>
 						</li>
-						<li class="nav-item"><a class="nav-link" href="#">홈으로</a></li>
+						<li class="nav-item"><a class="nav-link" href="index.jsp">홈으로</a></li>
 					</ul>
 					<form class="d-flex">
 						<input class="form-control me-2" type="search"
