@@ -52,7 +52,7 @@
 	</header>
 
 	<section class="d-flex flex-column align-items-center">
-		<h1>회원 목록조회/수정</h1>
+		<h1>회원 목록조회</h1>
 		<br>
 		<table border="1" width ="700">
 			<tr>
